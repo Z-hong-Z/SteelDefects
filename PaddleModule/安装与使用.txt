@@ -1,0 +1,49 @@
+目标：在paddlepaddle中调用PPYolo实现金属表面缺陷检测
+
+1.依赖文件的安装
+# 安装 paddledet 
+pip install paddledet==2.1.0 -i https://mirror.baidu.com/pypi/simple 
+pip install paddlex==1.3.9 -i https://mirror.baidu.com/pypi/simple 
+# 克隆 PaddleDetection 库
+git clone https://gitee.com/paddlepaddle/PaddleDetection.git
+
+
+2.处理数据集
+NEU-DET.zip 
+    ①Windows右键解压
+    ②Linux  unzip解压
+数据集目录结构
+    NEU-DET
+    ├── Annotations
+    └── JPEGImages
+在PaddleDetection的dataset中创建SteelDEC_VOCData
+移动 NEU-DET内部文件到SteelDEC_VOCData
+    dataset   
+    └──SteelDEC_VOCData
+        ├── Annotations
+        └── JPEGImages
+
+3.数据预处理 与 NEU-DET数据集的训练
+
+    3.1分割数据集
+        --dataset_dir 数据集SteelDEC_VOCData 相对或绝对地址
+        paddlex --split_dataset --format VOC --dataset_dir work/PaddleDetection/dataset/SteelDEC_VOCData/ --val_value 0.15  --test_value 0.10
+        输出Log
+        Dataset Split Done.
+        Train samples: x
+        Eval samples: x
+        Test samples: x
+        Split files saved in work/PaddleDetection/dataset/SteelDEC_VOCData/
+
+    3.2训练
+        脚本train.py
+        注意事项 
+        1. 在train.py 中 open打开的地址 在train.py文件未放到相应目录下的时候可能报错
+        2. 使用飞桨API高度封装化 不做超参数处理  使用时自己注意路径的问题即可
+        3. 模型保存地址save_dir 其中有一个best_module
+    
+
+4.模型测试
+    eval.py  + 注释
+    已提供best_module 设备有限可自行训练
+    
